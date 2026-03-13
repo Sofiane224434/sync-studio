@@ -1,0 +1,9 @@
+{
+  "name": "sync-studio",
+  "version": "1.0.0",
+  "description": "Hub central de synchronisation entre projets Git",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "private": true
+}
