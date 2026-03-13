@@ -11,6 +11,15 @@ const os = require("node:os");
 const path = require("node:path");
 const { execSync } = require("node:child_process");
 
+function parseJson(text, fallback) {
+  try {
+    const clean = String(text || "").replace(/^\uFEFF/, "");
+    return JSON.parse(clean);
+  } catch (_) {
+    return fallback;
+  }
+}
+
 // INIT_CWD = rÃ©pertoire depuis lequel `npm install` a Ã©tÃ© lancÃ© (variable npm)
 const selfDir = path.resolve(__dirname);
 const projectRoot = path.resolve(
@@ -33,7 +42,7 @@ try {
 
   // Lire le registre existant + migrer l'ancien format (strings â†’ objets)
   let raw = { projects: [] };
-  try { raw = JSON.parse(fs.readFileSync(registryPath, "utf8")); } catch (_) {}
+  raw = parseJson(fs.readFileSync(registryPath, "utf8"), raw);
   if (!Array.isArray(raw.projects)) raw.projects = [];
 
   raw.projects = raw.projects.map((p) =>

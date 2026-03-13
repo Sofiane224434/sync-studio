@@ -10,6 +10,15 @@ const os = require("node:os");
 const path = require("node:path");
 const { execSync } = require("node:child_process");
 
+function parseJson(text, fallback) {
+  try {
+    const clean = String(text || "").replace(/^\uFEFF/, "");
+    return JSON.parse(clean);
+  } catch (_) {
+    return fallback;
+  }
+}
+
 if (process.env.SYNC_IN_PROGRESS === "1") process.exit(0);
 
 const noPromptEnv = { ...process.env, GCM_INTERACTIVE: "never", GIT_TERMINAL_PROMPT: "0" };
@@ -25,7 +34,11 @@ function pushSource() {
 }
 
 let raw;
-try { raw = JSON.parse(fs.readFileSync(registryPath, "utf8")); } catch (_) { pushSource(); process.exit(0); }
+raw = parseJson(fs.readFileSync(registryPath, "utf8"), null);
+if (!raw) {
+  pushSource();
+  process.exit(0);
+}
 
 const projects = (Array.isArray(raw.projects) ? raw.projects : []).map((p) =>
   typeof p === "string"

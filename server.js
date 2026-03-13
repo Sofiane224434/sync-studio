@@ -13,7 +13,12 @@ const currentArgIndex = process.argv.indexOf("--current");
 const currentProject = currentArgIndex >= 0 ? path.resolve(process.argv[currentArgIndex + 1] || "") : "";
 
 function parseJson(text, fallback) {
-  try { return JSON.parse(text); } catch (_) { return fallback; }
+  try {
+    const clean = String(text || "").replace(/^\uFEFF/, "");
+    return JSON.parse(clean);
+  } catch (_) {
+    return fallback;
+  }
 }
 
 function sendJson(res, code, payload) {
