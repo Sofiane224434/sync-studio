@@ -1,9 +1,12 @@
-{
+﻿{
   "name": "sync-studio",
   "version": "1.0.0",
-  "description": "Hub central de synchronisation entre projets Git",
-  "scripts": {
-    "start": "node server.js"
+  "description": "Hub de synchronisation entre projets Git",
+  "bin": {
+    "sync-studio": "./cli.js"
   },
-  "private": true
+  "scripts": {
+    "postinstall": "node postinstall.js",
+    "start": "node server.js"
+  }
 }
