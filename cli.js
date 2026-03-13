@@ -1,4 +1,5 @@
-﻿"use strict";
+#!/usr/bin/env node
+"use strict";
 
 /**
  * EntrÃ©e principale du binaire `sync-studio`.
